@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Google Identity Auth nodes for n8n",
     "license": "MIT",
-    "homepage": "",
+    "homepage": "https://github.com/yamachu/n8n-nodes-google-identity-auth#readme",
     "keywords": [
         "n8n-community-node-package"
     ],
