@@ -14,6 +14,11 @@ type CredentialProperties = {
 type SigninMethods = 'refresh_token' | 'email_password';
 type ArrayFlatten<T> = T extends (infer U)[] ? U : T;
 
+const signinMethods = {
+	RefreshToken: 'refresh_token',
+	EmailPassword: 'email_password',
+} as const satisfies Record<string, SigninMethods>;
+
 export class GoogleIdentityAuthApi implements ICredentialType {
 	name = 'googleIdentityAuthApi';
 
@@ -30,14 +35,14 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 			options: [
 				{
 					name: 'Refresh Token',
-					value: 'refresh_token',
+					value: signinMethods.RefreshToken,
 				},
 				{
 					name: 'Email/Password',
-					value: 'email_password',
+					value: signinMethods.EmailPassword,
 				},
 			] satisfies (ArrayFlatten<INodeProperties['options']> & { value: SigninMethods })[],
-			default: 'refresh_token',
+			default: signinMethods.RefreshToken,
 			required: true,
 			description: 'The method to use for signing in to Google Identity Auth',
 		},
@@ -53,7 +58,7 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 			description: 'The Google Identity Auth refresh token used to obtain new access tokens',
 			displayOptions: {
 				show: {
-					signinMethod: ['refresh_token'],
+					signinMethod: [signinMethods.RefreshToken],
 				},
 			},
 		},
@@ -66,7 +71,7 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 			description: 'The email address of the Google Identity Auth user',
 			displayOptions: {
 				show: {
-					signinMethod: ['email_password'],
+					signinMethod: [signinMethods.EmailPassword],
 				},
 			},
 		},
@@ -82,7 +87,7 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 			description: 'The password of the Google Identity Auth user',
 			displayOptions: {
 				show: {
-					signinMethod: ['email_password'],
+					signinMethod: [signinMethods.EmailPassword],
 				},
 			},
 		},
@@ -147,7 +152,7 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 		const apiKey = credentialProperties.apiKey as string;
 
 		switch (signinMethod) {
-			case 'refresh_token': {
+			case signinMethods.RefreshToken: {
 				const refreshToken = credentialProperties.refreshToken as string;
 
 				const res: { id_token: string } = await this.helpers.httpRequest({
@@ -165,7 +170,7 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 				return { accessToken: res.id_token };
 			}
 
-			case 'email_password': {
+			case signinMethods.EmailPassword: {
 				const email = credentialProperties.email as string;
 				const password = credentialProperties.password as string;
 
