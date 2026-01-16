@@ -20,6 +20,8 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 3. Copy the generated API key
 4. Ensure that the "Key restriction" is set to "None" or it can access the "Identity Toolkit API" and "Token Service API"
 
+The generated accessToken is automatically refreshed when a 401 response is received. However, the generation of the accessToken is not guaranteed if a 401 response is not returned.
+
 ## Compatibility
 
 Tested with n8n version: 2.3.5
