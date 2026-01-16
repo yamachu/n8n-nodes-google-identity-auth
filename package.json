@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/yamachu/n8n-nodes-google-identity-auth.git"
+        "url": "git+https://github.com/yamachu/n8n-nodes-google-identity-auth.git"
     },
     "scripts": {
         "build": "n8n-node build",
