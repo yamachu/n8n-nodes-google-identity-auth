@@ -158,10 +158,10 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 				const res: { id_token: string } = await this.helpers.httpRequest({
 					url: `https://securetoken.googleapis.com/v1/token?key=${apiKey}`,
 					method: 'POST',
-					body: JSON.stringify({
+					body: {
 						grant_type: 'refresh_token',
-						refreshToken,
-					}),
+						refresh_token: refreshToken,
+					},
 					headers: {
 						'Content-Type': 'application/json',
 					},
@@ -177,11 +177,11 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 				const res: { idToken: string } = await this.helpers.httpRequest({
 					url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
 					method: 'POST',
-					body: JSON.stringify({
+					body: {
 						email,
 						password,
 						returnSecureToken: true,
-					}),
+					},
 					headers: {
 						'Content-Type': 'application/json',
 					},
