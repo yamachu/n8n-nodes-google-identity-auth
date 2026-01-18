@@ -33,7 +33,9 @@
         "credentials": [
             "dist/credentials/GoogleIdentityAuthApi.credentials.js"
         ],
-        "nodes": []
+        "nodes": [
+            "dist/nodes/GetUserProfile/GetUserProfile.node.js"
+        ]
     },
     "devDependencies": {
         "@n8n/node-cli": "*",
