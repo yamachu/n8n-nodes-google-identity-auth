@@ -1,10 +1,10 @@
 import type {
 	CredentialInformation,
-	IAuthenticate,
 	ICredentialDataDecryptedObject,
 	ICredentialType,
 	IDataObject,
 	IHttpRequestHelper,
+	IHttpRequestOptions,
 	INodeProperties,
 } from 'n8n-workflow';
 
@@ -26,6 +26,8 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 
 	// See also: https://firebase.google.com/docs/reference/rest/auth
 	documentationUrl = 'https://docs.cloud.google.com/identity-platform/docs/use-rest-api';
+
+	extends = ['googleApi'];
 
 	properties = [
 		{
@@ -133,14 +135,25 @@ export class GoogleIdentityAuthApi implements ICredentialType {
 		},
 	] as const satisfies INodeProperties[];
 
-	authenticate: IAuthenticate = {
-		type: 'generic',
-		properties: {
-			headers: {
-				['={{$credentials.headerName ?? "Authorization"}}']: '=Bearer {{$credentials.accessToken}}',
-			},
-		},
-	};
+	async authenticate(
+		credentials: ICredentialDataDecryptedObject,
+		requestOptions: IHttpRequestOptions,
+	): Promise<IHttpRequestOptions> {
+		const credentialProperties = credentials as CredentialProperties;
+		const accessToken = credentialProperties.accessToken;
+
+		requestOptions.headers ??= {};
+
+		if (credentialProperties.header) {
+			const headerName = credentialProperties.headerName as string;
+
+			requestOptions.headers[headerName] = `Bearer ${accessToken}`;
+		} else {
+			requestOptions.headers['Authorization'] = `Bearer ${accessToken}`;
+		}
+
+		return requestOptions;
+	}
 
 	async preAuthentication(
 		this: IHttpRequestHelper,
